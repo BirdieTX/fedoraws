@@ -21,54 +21,67 @@ printf $CYN"Copying system configuration files ..."$END
 OUT='DNF Config added successfully ...'
 printf $CYN"Adding DNF config ..."$END
     cp -r dnf.conf /etc/dnf || OUT="Failed to copy dnf config ..."
+    printf $CYN
     echo $OUT
+    printf $END
 
 OUT='Selinux set to permissive ...'
 printf $CYN"Adding Selinux config ..."$END
     cp -r config /etc/selinux || OUT='Failed to change Selnux config ...'
+    printf $CYN
     echo $OUT
+    printf $END
 
 OUT='Bibata cursor added successfully ...'
 printf $CYN"Adding Bibata cursor ..."$END
     cp -r Bibata-Modern-Classic /usr/share/icons || OUT='Failed to add Bibata cursor ...'
+    printf $CYN
     echo $OUT
+    printf $END
 
 OUT='Mac style Plymouth theme added to Plymouth themes folder ...'
 printf $CYN"Adding Mac style Plymouth theme ..."$END
     cp -r fedora-mac-style /usr/share/plymouth/themes || OUT='Failed to add Mac style Plymouth theme to themes folder ...'
+    printf $CYN
     echo $OUT
+    printf $END
 
 OUT='Mac style Plymouth theme installed successfully ...'
 printf $CYN"Installing Mac style Plymouth theme ..."$END
     plymouth-set-default-theme -R fedora-mac-style || OUT='Failed to install Mac style Plymouth theme ...'
+    printf $CYN
     echo $OUT
-
-OUT='Successfully regenerated initramfs ...'
-printf $CYN"Regenerating initramfs ..."$END
-    dracut --regenerate-all -f || OUT='Failed to regenerate initramfs ...'
-    echo $OUT
+    printf $END
 
 printf $CYN"Copying user configuration files ..."$END
 
 OUT='Successfully copied .bashrc to home directory ...'
 printf $CYN"Copying .bashrc ..."$END
     sudo -u "$SUDO_USER" cp -r .bashrc "$USER_HOME" || OUT='Failed to copy .bashrc to home directory ...'
+    printf $CYN
     echo $OUT
+    printf $END
 
 OUT='Successfully copied .bashrc.d folder to home directory ...'
 printf $CYN"Copying .bashrc.d folder to home directory ..."$END
     sudo -u "$SUDO_USER" cp -r .bashrc.d "$USER_HOME" || OUT='Failed to copy .bashrc.d folder to home directory ...'
+    printf $CYN
     echo $OUT
+    printf $END
 
 OUT='Successfully added user config folder to home directory ...'
 printf $CYN"Adding user config folder to home directory ..."$END
     sudo -u "$SUDO_USER" cp -r .config "$USER_HOME" || OUT='Failed to copy .config files to ~/.config'
+    printf $CYN
     echo $OUT
+    printf $END
 
 OUT='Desktop folder has been hidden from home directory ...'
 printf $CYN"Hiding Desktop folder ..."$END
     sudo -u "$SUDO_USER" mv "$USER_HOME"/Desktop "$USER_HOME"/.Desktop || OUT='Failed to hide Desktop folder ...'
+    printf $CYN
     echo $OUT
+    printf $END
 
 printf $CYN"Removing packages from system ..."$END
 
@@ -91,19 +104,25 @@ dnf remove -y \
     totem \
     yelp || OUT='Failed to remove packages from system ...'
     dnf autoremove -y
+    printf $CYN
     echo $OUT
+    printf $END
 
 printf $CYN"Enabling additional repositories ..."$END
 
 OUT='Brave Browser repository added ...'
 printf $CYN"Adding Brave Browser rpm repository ..."$END
     dnf config-manager addrepo --from-repofile=https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
+    printf $CYN
     echo $OUT
+    printf $END
 
 OUT='Terra repository added ...'
 printf $CYN"Adding Terra repository ..."$END
     dnf install -y --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
+    printf $CYN
     echo $OUT
+    printf $END
 
 printf $CYN"Adding RPM Fusion repositories ..."$END
 
@@ -111,7 +130,9 @@ OUT='RPM Fusion repositories added ...'
 dnf install -y \
     "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm" \
     "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
+    printf $CYN
     echo $OUT
+    printf $END
 
 printf $CYN"Refreshing mirrorlist and performing system update ..."$END
     dnf upgrade --refresh -y
@@ -194,7 +215,7 @@ dnf install --allowerasing -y \
     vlc-plugins-freeworld
     printf $GRN "System rpm packages installed ..."$END
 
-printf $CYN"Setting default text editor to VS Codium ..."$END
+printf $CYN"Setting default text editor to Codium ..."$END
     xdg-mime default codium.desktop text/plain || printf $RED"Failed to change default text editor to Visual Studio Code ..."$END && sleep 2
 
 printf $CYN"Switching mesa drivers to freeworld ..."$END
@@ -234,7 +255,12 @@ printf $CYN"Installing flatpaks from Flathub ..."$END
 printf $CYN"Disabling Network Manager wait online service ..."$END
     systemctl disable NetworkManager-wait-online.service || printf $RED"Failed to disable NetworkManager-wait-online.service"$END
     printf $GRN"NetworkManager-wait-online.service disabled ..."$END
-    dracut --regenerate-all -f
+
+
+OUT='Successfully regenerated initramfs ...'
+printf $CYN"Regenerating initramfs ..."$END
+    dracut --regenerate-all -f || OUT='Failed to regenerate initramfs ...'
+    echo $OUT
 
 printf $CYN"Updating bootloader  ...$END"
     printf $CYN"Updating grub config file ..."$END
@@ -244,7 +270,6 @@ printf $CYN"Updating bootloader  ...$END"
     grub2-mkfont -s 24 -o /boot/grub2/fonts/JetBrainsBold.pf2 /usr/share/fonts/jetbrains-mono-nl-fonts/JetBrainsMonoNL-Bold.ttf || printf $RED"Failed to make font ..." && sleep 2
     printf $GRN "JetBrains Mono font added ..."$END
     printf $CYN"Updating grub ..."$END
-    cp -r themes /boot/grub2
     grub2-mkconfig -o /etc/grub2.cfg || printf $RED"Failed to update grub ..."$END && sleep 2
 
 printf $CYN"Setup complete!"$END
