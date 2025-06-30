@@ -89,6 +89,7 @@ OUT='All packages removed successfully ...'
 dnf remove -y \
     abrt \
     firefox \
+    gnome-boxes \
     gnome-calendar \
     gnome-connections \
     gnome-contacts \
